@@ -1,7 +1,9 @@
 package com.example.checkout.others.hilt.di
 
 import com.example.checkout.models.ItemModel
+import com.example.checkout.repo.impl.DataRepositoryImpl
 import com.example.checkout.repo.impl.RepositoryImpl
+import com.example.checkout.repo.intf.DataRepository
 import com.example.checkout.repo.intf.Repository
 import com.example.checkout.viewModels.ItemFragViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -27,6 +29,9 @@ object AppModule {
     @Provides
     fun provideRepo(impl : RepositoryImpl) : Repository = impl
 
+    @Provides
+    fun provideDataRepo(impl : DataRepositoryImpl) : DataRepository = impl
+
     @Singleton
     @Provides
     fun provideFireStore(): FirebaseFirestore = Firebase.firestore
@@ -35,6 +40,7 @@ object AppModule {
     @Provides
     fun provideFireBaseUser(): FirebaseUser? = FirebaseAuth.getInstance().currentUser
 
-    @Provides
-    fun provideItemsList(vm : ItemFragViewModel): ArrayList<ItemModel> = TODO("get the list")
+
+
+
 }

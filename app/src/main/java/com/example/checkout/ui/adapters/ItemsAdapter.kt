@@ -13,7 +13,7 @@ import com.example.checkout.R
 import com.example.checkout.models.ItemModel
 import javax.inject.Inject
 
-class ItemsAdapter @Inject constructor(private val list: ArrayList<ItemModel>, onClick: () -> Unit) :
+class ItemsAdapter(private val list: ArrayList<ItemModel>, onClick: () -> Unit) :
     RecyclerView.Adapter<ItemsAdapter.MyViewHolder>() {
     private lateinit var context: Context
     private lateinit var onClick: () -> Unit
@@ -23,11 +23,11 @@ class ItemsAdapter @Inject constructor(private val list: ArrayList<ItemModel>, o
     }
 
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val image = itemView.findViewById<ImageView>(R.id.image)
-        val name = itemView.findViewById<TextView>(R.id.item_name)
-        val disc = itemView.findViewById<TextView>(R.id.details)
-        val price = itemView.findViewById<TextView>(R.id.price)
-        val add = itemView.findViewById<AppCompatButton>(R.id.btn_add)
+        val image: ImageView = itemView.findViewById<ImageView>(R.id.image)
+        val name: TextView = itemView.findViewById<TextView>(R.id.item_name)
+        val disc: TextView = itemView.findViewById<TextView>(R.id.details)
+        val price: TextView = itemView.findViewById<TextView>(R.id.price)
+        val add: AppCompatButton = itemView.findViewById<AppCompatButton>(R.id.btn_add)
 
     }
 
@@ -52,6 +52,20 @@ class ItemsAdapter @Inject constructor(private val list: ArrayList<ItemModel>, o
             onClick()
         }
 
+
+    }
+
+    fun addItem(item :ItemModel){
+        list.add(item)
+        notifyItemInserted(list.lastIndex)
+    }
+
+    fun updateList(newList : ArrayList<ItemModel>){
+        val s1 = list.lastIndex
+        list.clear()
+        notifyItemRangeRemoved(0,s1)
+        list.addAll(newList)
+        notifyItemRangeInserted(0,list.lastIndex)
 
     }
 

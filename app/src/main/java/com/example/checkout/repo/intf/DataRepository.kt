@@ -1,6 +1,7 @@
 package com.example.checkout.repo.intf
 
 import com.example.checkout.models.ItemModel
+import com.example.checkout.models.ShopModel
 import com.google.firebase.firestore.CollectionReference
 
 interface DataRepository {
@@ -11,7 +12,11 @@ interface DataRepository {
 
     suspend fun getItemData() : ArrayList<ItemModel>
 
-    suspend fun getShopsData() : ArrayList<Any>
+    suspend fun storeItem(item:ItemModel)
+
+    suspend fun storeShop(shop : ShopModel)
+
+    suspend fun getShopsData() : ArrayList<ShopModel>
 
 
 }
