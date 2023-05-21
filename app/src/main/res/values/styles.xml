@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="round">
+            <item name="cornerFamilyTopLeft">rounded</item>
+            <item name="cornerFamilyTopRight">rounded</item>
+            <item name="cornerFamilyBottomLeft">rounded</item>
+            <item name="cornerFamilyBottomRight">rounded</item>
+            <item name="cornerSizeTopLeft">10%</item>
+            <item name="cornerSizeTopRight">10%</item>
+            <item name="cornerSizeBottomLeft">10%</item>
+            <item name="cornerSizeBottomRight">10%</item>
+    </style>
+
+    <style name="header">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="body">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+</resources>

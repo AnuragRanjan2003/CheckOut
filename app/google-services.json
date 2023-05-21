@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "349029949507",
+    "project_id": "check-out-abd70",
+    "storage_bucket": "check-out-abd70.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:349029949507:android:822a278ab2dedc49c734f6",
+        "android_client_info": {
+          "package_name": "com.example.checkout"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "349029949507-kiltgqcke0hbhgm3hdck2vjsbd65ahc7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZRhdrD-G1_ZSnZVRgGI-NQnXr2aaDWHQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "349029949507-kiltgqcke0hbhgm3hdck2vjsbd65ahc7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
