@@ -9,23 +9,26 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.checkout.databinding.FragmentItemsListBinding
-import com.example.checkout.models.ShopModel
 import com.example.checkout.ui.adapters.ItemsAdapter
 import com.example.checkout.ui.adapters.ShopAdapter
 import com.example.checkout.viewModels.ItemFragViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ItemsListFragment : Fragment() {
     private lateinit var binding: FragmentItemsListBinding
-    private val viewModel by viewModels<ItemFragViewModel>()
-    private lateinit var itemAdapter: ItemsAdapter
-    private lateinit var shopAdapter: ShopAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    // setting the owner as activity as fragment is completely destroyed on configuration change
+    private val viewModel by viewModels<ItemFragViewModel>({ requireActivity() })
+    private var pos = -1
 
-    }
+    @Inject
+    lateinit var itemAdapter: ItemsAdapter
+
+    @Inject
+    lateinit var shopAdapter: ShopAdapter
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,8 +36,7 @@ class ItemsListFragment : Fragment() {
     ): View {
         binding = FragmentItemsListBinding.inflate(inflater, container, false)
 
-        itemAdapter = ItemsAdapter(ArrayList()) {}
-        shopAdapter = ShopAdapter(ArrayList()) {}
+
         //viewModel.putData(ItemModel("burger", "food", "", "100"))
         /*viewModel.putShop(
             ShopModel(
@@ -61,11 +63,13 @@ class ItemsListFragment : Fragment() {
         binding.placeRec.hasFixedSize()
         binding.placeRec.adapter = shopAdapter
 
+
         viewModel.getItemList()
         viewModel.getShopList()
 
-        viewModel.getItemsListLiveData().observe(viewLifecycleOwner) {
-            e("list", "$it")
+
+        viewModel.getFilteredItemListLiveData().observe(viewLifecycleOwner) {
+            e("filtered list", "$it")
             itemAdapter.updateList(it)
         }
 
@@ -74,7 +78,30 @@ class ItemsListFragment : Fragment() {
             shopAdapter.updateList(it)
         }
 
+        viewModel.getSelected().observe(viewLifecycleOwner) {
+            pos = it
+            e("pos", "$pos")
+        }
+
+
+        shopAdapter.setOnItemClickListener {
+            shopSelected(it)
+        }
+
         return binding.root
+    }
+
+    private fun shopSelected(position: Int) {
+        val shop = shopAdapter.list[position]
+        e("shop", "${shop.name}")
+
+        viewModel.select(position)
+        if ( pos==-1 ) {
+            shopAdapter.unselectAll()
+        } else {
+            shopAdapter.selectPos(pos)
+        }
+
     }
 
 

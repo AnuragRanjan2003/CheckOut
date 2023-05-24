@@ -13,23 +13,32 @@ import com.example.checkout.R
 import com.example.checkout.databinding.FragmentLoginBinding
 import com.example.checkout.others.utils.Completion
 import com.example.checkout.viewModels.LoginFragViewModel
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class LoginFragment : Fragment() {
+class LoginFragment  : Fragment() {
     private lateinit var binding : FragmentLoginBinding
     private val viewModel by viewModels<LoginFragViewModel>()
+    private val fUser : FirebaseUser? = FirebaseAuth.getInstance().currentUser
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        fUser?.apply {
+            findNavController().navigate(R.id.itemsListFragment)
+        }
 
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentLoginBinding.inflate(inflater,container,false)
 
 

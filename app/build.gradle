@@ -57,6 +57,7 @@ dependencies {
     //nav
     implementation 'androidx.navigation:navigation-fragment-ktx:2.5.3'
     implementation 'androidx.navigation:navigation-ui-ktx:2.5.3'
+
     def lifecycle_version = "2.6.1"
     def arch_version = "2.2.0"
     // ViewModel
@@ -109,6 +110,7 @@ dependencies {
 
     //Glide
     implementation 'com.github.bumptech.glide:glide:4.15.1'
+    implementation 'androidx.fragment:fragment-ktx:1.5.7'
 }
 kapt {
     correctErrorTypes true

@@ -1,11 +1,11 @@
 package com.example.checkout.others.hilt.di
 
-import com.example.checkout.models.ItemModel
 import com.example.checkout.repo.impl.DataRepositoryImpl
 import com.example.checkout.repo.impl.RepositoryImpl
 import com.example.checkout.repo.intf.DataRepository
 import com.example.checkout.repo.intf.Repository
-import com.example.checkout.viewModels.ItemFragViewModel
+import com.example.checkout.ui.adapters.ItemsAdapter
+import com.example.checkout.ui.adapters.ShopAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
@@ -27,10 +27,10 @@ object AppModule {
     fun provideFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
 
     @Provides
-    fun provideRepo(impl : RepositoryImpl) : Repository = impl
+    fun provideRepo(impl: RepositoryImpl): Repository = impl
 
     @Provides
-    fun provideDataRepo(impl : DataRepositoryImpl) : DataRepository = impl
+    fun provideDataRepo(impl: DataRepositoryImpl): DataRepository = impl
 
     @Singleton
     @Provides
@@ -40,7 +40,11 @@ object AppModule {
     @Provides
     fun provideFireBaseUser(): FirebaseUser? = FirebaseAuth.getInstance().currentUser
 
+    @Provides
+    fun provideItemAdapter(): ItemsAdapter = ItemsAdapter(ArrayList()) {}
 
+    @Provides
+    fun provideShopAdapter(): ShopAdapter = ShopAdapter(ArrayList()) {}
 
 
 }
