@@ -21,6 +21,11 @@ class ItemFragViewModel @Inject constructor(private val repo: DataRepository) : 
     private val shopList: MutableLiveData<ArrayList<ShopModel>> by lazy { MutableLiveData<ArrayList<ShopModel>>() }
     private val filteredItemList: MutableLiveData<ArrayList<ItemModel>> by lazy { MutableLiveData<ArrayList<ItemModel>>() }
     private val selected = MutableLiveData(-1)
+    private val selectedItems: MutableLiveData<MutableSet<ItemModel>> by lazy { MutableLiveData<MutableSet<ItemModel>>() }
+
+    init {
+        selectedItems.value = mutableSetOf()
+    }
 
 
     fun getItemList() {
@@ -106,6 +111,35 @@ class ItemFragViewModel @Inject constructor(private val repo: DataRepository) : 
 
     fun getSelected(): LiveData<Int> {
         return selected
+    }
+
+    fun removeItem(item: ItemModel) {
+        var x = selectedItems.value
+        if (x == null || x.isEmpty()) x = mutableSetOf()
+        else {
+            x.apply {
+                remove(item)
+            }
+        }
+
+        selectedItems.value = x
+
+
+    }
+
+    fun addItem(item: ItemModel) {
+        var x = selectedItems.value
+        if (x == null) x = mutableSetOf()
+        x.apply {
+            add(item)
+        }
+
+        selectedItems.value = x
+
+    }
+
+    fun getSelectedItems(): LiveData<MutableSet<ItemModel>> {
+        return selectedItems
     }
 
 

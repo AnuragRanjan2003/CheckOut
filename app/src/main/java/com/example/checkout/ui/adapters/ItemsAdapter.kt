@@ -15,10 +15,10 @@ import com.bumptech.glide.Glide
 import com.example.checkout.R
 import com.example.checkout.models.ItemModel
 
-class ItemsAdapter(private val list: ArrayList<ItemModel>, onClick: () -> Unit) :
+class ItemsAdapter(val list: ArrayList<ItemModel>, onClick: (Int) -> Unit) :
     RecyclerView.Adapter<ItemsAdapter.MyViewHolder>(){
     private lateinit var context: Context
-    private lateinit var onClick: () -> Unit
+    private lateinit var onClick: (Int) -> Unit
 
 
     init {
@@ -54,7 +54,7 @@ class ItemsAdapter(private val list: ArrayList<ItemModel>, onClick: () -> Unit) 
         holder.price.text = item.price
         Glide.with(context).load(item.imageUrl).into(holder.image)
         holder.add.setOnClickListener {
-            this.onClick()
+            this.onClick(position)
         }
 
 
@@ -77,7 +77,7 @@ class ItemsAdapter(private val list: ArrayList<ItemModel>, onClick: () -> Unit) 
 
     }
 
-    fun addOnClickListener(click: () -> Unit) {
+    fun addOnClickListener(click: (Int) -> Unit) {
         this.onClick = click
     }
 

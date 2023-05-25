@@ -4,6 +4,7 @@ import com.example.checkout.repo.impl.DataRepositoryImpl
 import com.example.checkout.repo.impl.RepositoryImpl
 import com.example.checkout.repo.intf.DataRepository
 import com.example.checkout.repo.intf.Repository
+import com.example.checkout.ui.adapters.BottomRecAdapter
 import com.example.checkout.ui.adapters.ItemsAdapter
 import com.example.checkout.ui.adapters.ShopAdapter
 import com.google.firebase.auth.FirebaseAuth
@@ -45,6 +46,9 @@ object AppModule {
 
     @Provides
     fun provideShopAdapter(): ShopAdapter = ShopAdapter(ArrayList()) {}
+
+    @Provides
+    fun provideBottomAdapter() : BottomRecAdapter = BottomRecAdapter(ArrayList(),ArrayList())
 
 
 }
