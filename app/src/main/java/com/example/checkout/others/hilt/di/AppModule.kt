@@ -48,7 +48,7 @@ object AppModule {
     fun provideShopAdapter(): ShopAdapter = ShopAdapter(ArrayList()) {}
 
     @Provides
-    fun provideBottomAdapter() : BottomRecAdapter = BottomRecAdapter(ArrayList(),ArrayList())
+    fun provideBottomAdapter() : BottomRecAdapter = BottomRecAdapter(mutableMapOf())
 
 
 }

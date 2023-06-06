@@ -12,16 +12,13 @@ import com.bumptech.glide.Glide
 import com.example.checkout.R
 import com.example.checkout.models.ItemModel
 
-class BottomRecAdapter(val list: ArrayList<ItemModel>, val amount: ArrayList<Int>) :
+class BottomRecAdapter(val map: MutableMap<ItemModel, Int>) :
     RecyclerView.Adapter<BottomRecAdapter.MyViewHolder>() {
     private lateinit var context: Context
     var onRemoveListener: (ItemModel) -> Unit = {}
-    var onChangeListener: () -> Unit = {}
+    var onChangeListener: (ItemModel) -> Unit = {}
     var total: Int = 0
 
-    init {
-        for (it in list) amount.add(1)
-    }
 
     inner class MyViewHolder(item: View) : RecyclerView.ViewHolder(item) {
         val image: ImageView = item.findViewById(R.id.image)
@@ -43,13 +40,14 @@ class BottomRecAdapter(val list: ArrayList<ItemModel>, val amount: ArrayList<Int
     }
 
     override fun getItemCount(): Int {
-        return list.size
+        return map.size
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        total=0
-        val item = list[position]
-        val amt = amount[position]
+        total = 0
+        val items = map.keys.toList()
+        val item = items[position]
+        val amt = map.getOrDefault(item, 0)
         total += item.price.toInt() * amt
 
         holder.apply {
@@ -60,45 +58,59 @@ class BottomRecAdapter(val list: ArrayList<ItemModel>, val amount: ArrayList<Int
             num.text = amt.toString()
         }
 
-        holder.add.setOnClickListener { incrementItem(position) }
-        holder.cancel.setOnClickListener { removeItem(position) }
-    }
-
-    fun updateList(newList: ArrayList<ItemModel>) {
-        val s1 = list.size
-        list.clear()
-        notifyItemRangeRemoved(0, s1)
-        e("newList/Adapter", "$newList")
-        if (newList.isEmpty()) return
-        list.addAll(newList)
-        amount.clear()
-        for (it in list) amount.add(1)
-
-        notifyItemRangeInserted(0, list.size)
-        e("adapter", "updated : $list")
-        e("adapter", "updated : $amount")
-        total = 0
-        for (i in 0..list.lastIndex) {
-            total += list[i].price.toInt() * amount[i]
+        holder.add.setOnClickListener {
+            println("item clicked")
+            incrementItem(position)
         }
-        e("adapter", "tot : $total")
+        holder.cancel.setOnClickListener {
+            println("remove")
+            removeItem(position)
+        }
+    }
 
+    // to update values in the items list
+    fun updateMap(newMap: Map<ItemModel, Int>) {
+        val s = itemCount
+        map.clear()
+        notifyItemRangeRemoved(0, s)
+        e("adapter/newMap", "$newMap")
+        if (newMap.isEmpty()) return
+        map.putAll(newMap)
+        computeTotal()
+        notifyItemRangeInserted(0, newMap.size)
+    }
+
+    private fun computeTotal() {
+        total = 0
+        if (map.isEmpty()) return
+        map.forEach { (item, amt) ->
+            total += item.price.toInt() * amt
+        }
 
     }
 
-    private fun incrementItem(position: Int) {
-        amount[position]++
-        notifyItemChanged(position)
-        onChangeListener()
+    private fun incrementItem(pos: Int) {
+        map.keys.toList().apply {
+            if (pos > lastIndex) return
+            val item = this[pos]
+            map[item] = map.getOrDefault(item, 0) + 1
+            onChangeListener(item)
+            notifyItemChanged(pos)
+        }
+
     }
 
     private fun removeItem(position: Int) {
-        total -= list[position].price.toInt() * amount[position]
-        onRemoveListener(list[position])
-        list.removeAt(position)
-        amount.removeAt(position)
+        map.keys.toList().apply {
+            if (position > lastIndex) return
+            val item = this[position]
+            total -= item.price.toInt() * map[item]!!
+            onRemoveListener(item)
+            map.remove(item)
+            notifyItemRemoved(position)
 
-        notifyItemRemoved(position)
+
+        }
 
 
     }

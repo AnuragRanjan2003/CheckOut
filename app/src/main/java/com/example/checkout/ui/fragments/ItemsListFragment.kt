@@ -103,7 +103,7 @@ class ItemsListFragment : Fragment() {
         viewModel.getSelectedItems().observe(viewLifecycleOwner) {
             e("items", "$it")
             selList.clear()
-            for(i in it) selList.add(i)
+            for(i in it) selList.add(i.key)
 
             if (it.isNotEmpty()) bottomCard.expand()
             else bottomCard.contract()

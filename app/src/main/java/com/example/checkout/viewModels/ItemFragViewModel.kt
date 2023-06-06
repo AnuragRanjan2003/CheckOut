@@ -1,5 +1,6 @@
 package com.example.checkout.viewModels
 
+import android.util.Log.d
 import android.util.Log.e
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -19,12 +20,13 @@ import javax.inject.Inject
 class ItemFragViewModel @Inject constructor(private val repo: DataRepository) : ViewModel() {
     private val itemList: MutableLiveData<ArrayList<ItemModel>> by lazy { MutableLiveData<ArrayList<ItemModel>>() }
     private val shopList: MutableLiveData<ArrayList<ShopModel>> by lazy { MutableLiveData<ArrayList<ShopModel>>() }
+
     private val filteredItemList: MutableLiveData<ArrayList<ItemModel>> by lazy { MutableLiveData<ArrayList<ItemModel>>() }
     private val selected = MutableLiveData(-1)
-    private val selectedItems: MutableLiveData<MutableSet<ItemModel>> by lazy { MutableLiveData<MutableSet<ItemModel>>() }
+    private val selectedItems: MutableLiveData<MutableMap<ItemModel, Int>> by lazy { MutableLiveData<MutableMap<ItemModel, Int>>() }
 
     init {
-        selectedItems.value = mutableSetOf()
+        selectedItems.value = mutableMapOf()
     }
 
 
@@ -40,6 +42,7 @@ class ItemFragViewModel @Inject constructor(private val repo: DataRepository) : 
             }
         }
     }
+
 
     fun putData(item: ItemModel) {
         try {
@@ -115,7 +118,7 @@ class ItemFragViewModel @Inject constructor(private val repo: DataRepository) : 
 
     fun removeItem(item: ItemModel) {
         var x = selectedItems.value
-        if (x == null || x.isEmpty()) x = mutableSetOf()
+        if (x == null || x.isEmpty()) x = mutableMapOf()
         else {
             x.apply {
                 remove(item)
@@ -127,19 +130,36 @@ class ItemFragViewModel @Inject constructor(private val repo: DataRepository) : 
 
     }
 
+
     fun addItem(item: ItemModel) {
         var x = selectedItems.value
-        if (x == null) x = mutableSetOf()
+        if (x == null) x = mutableMapOf()
         x.apply {
-            add(item)
+            putIfAbsent(item, 1)
         }
 
         selectedItems.value = x
 
     }
 
-    fun getSelectedItems(): LiveData<MutableSet<ItemModel>> {
+    fun getSelectedItems(): LiveData<MutableMap<ItemModel, Int>> {
         return selectedItems
+    }
+
+    fun incrementAmount(item: ItemModel) {
+        selectedItems.value!![item]?.apply {
+            selectedItems.value!![item] = this + 1
+            println("vm / incremented  ( ${item.name} , ${selectedItems.value!![item]} )")
+        }
+    }
+
+    fun getTotal(): Int {
+        d("vm/tot" , "total" )
+        var tot = 0
+        selectedItems.value!!.forEach { (item, amt) ->
+            tot += item.price.toInt() * amt
+        }
+        return tot
     }
 
 

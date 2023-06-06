@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.checkout.databinding.FragmentItemsBottomBinding
-import com.example.checkout.models.ItemModel
 import com.example.checkout.ui.adapters.BottomRecAdapter
 import com.example.checkout.viewModels.ItemFragViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -35,7 +34,10 @@ class ItemsBottomFragment : BottomSheetDialogFragment() {
         binding.btmRec.hasFixedSize()
         binding.btmRec.adapter = bottomAdapter
 
-        bottomAdapter.onChangeListener = { binding.total.text = bottomAdapter.total.toString() }
+        bottomAdapter.onChangeListener = {
+            viewModel.incrementAmount(it)
+            binding.total.text  = viewModel.getTotal().toString()
+        }
 
         bottomAdapter.onRemoveListener = { it ->
             viewModel.removeItem(it)
@@ -45,18 +47,13 @@ class ItemsBottomFragment : BottomSheetDialogFragment() {
 
 
         viewModel.getSelectedItems().observe(viewLifecycleOwner) {
-            e("sel items bottom", "$it")
-            val lt = arrayListOf<ItemModel>()
-            val amt = arrayListOf<Int>()
-            for (item in it) {
-                lt.add(item)
-                amt.add(1)
-            }
-            e(tag, "list : $lt")
-            e(tag, "amt: $amt")
-            bottomAdapter.updateList(lt)
 
-            e(tag, "${bottomAdapter.total}")
+            e("bottom_frag/map", "$it")
+
+            bottomAdapter.updateMap(it)
+
+
+            e("bottom_total", "${bottomAdapter.total}")
             binding.total.text = bottomAdapter.total.toString()
 
 
